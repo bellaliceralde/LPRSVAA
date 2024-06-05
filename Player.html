@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Zone - Player POV</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: lightseagreen;
+            text-align: center;
+            padding: 20px;
+            color: #fff;
+        }
+        h1, h2, h3, h4 {
+            color: #fff;
+        }
+        .game-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+        .battle-log {
+            background-color: #eee;
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .battle-log h4 {
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Battle Based Game</h2>
+    <h1>THE ZONE</h1>
+    <div class="game-container">
+        <div>
+            <button onclick="playerDecision('attack')">Attack The Enemy</button>
+            <button onclick="playerDecision('defend')">Defend Against The Enemy</button>
+        </div>
+        <h4>The Player's Health is: <span id="player-health">100</span></h4>
+        <button onclick="usePotion('healing')">Use Healing Potion</button><br>
+        <button onclick="usePotion('immunity')">Use Immunity Potion</button><br>
+        <button onclick="usePotion('strength')">Use Strength Potion</button>
+        <h4>The Enemy's Health is: <span id="enemy-health">100</span></h4>
+        <div class="battle-log">
+            <h2>BATTLE LOG:</h2>
+            <h4 id="player-log"></h4>
+            <h4 id="enemy-log"></h4>
+        </div>
+    </div>
+    <script>
+        let playerHealth = 100;
+        let enemyHealth = 100;
+        let playerHealthPotions = 3;
+        let playerImmunityPotions = 2;
+        let playerStrengthPotion = 1;
+        let immunityUsed = false;
+        let strengthUsed = false;
+
+        function playerDecision(decision) {
+            if (playerHealth <= 0 || enemyHealth <= 0) {
+                alert("The battle is over!");
+                return;
+            }
+            let playerDamage = 0;
+            let enemyDamage = 0;
+
+            if (decision === 'attack') {
+                playerDamage = strengthUsed ? (Math.floor(Math.random() * 9) + 2) * 2 : Math.floor(Math.random() * 9) + 2;
+                strengthUsed = false;
+                enemyHealth -= playerDamage;
+                document.getElementById('player-log').innerText = `Player chose to attack and inflicted ${playerDamage} damage.`;
+            } else {
+                playerDamage = 0;
+                document.getElementById('player-log').innerText = "Player chose to defend.";
+            }
+
+            let enemyDecision = Math.random() < 0.5 ? 'attack' : 'defend';
+            if (enemyDecision === 'attack') {
+                enemyDamage = immunityUsed ? 0 : (Math.random() < 0.1 ? (Math.floor(Math.random() * 9) + 2) * 2 : Math.floor(Math.random() * 9) + 2);
+                immunityUsed = false;
+                playerHealth -= enemyDamage;
+                document.getElementById('enemy-log').innerText = `Enemy chose to attack and inflicted ${enemyDamage} damage.`;
+            } else {
+                enemyDamage = 0;
+                document.getElementById('enemy-log').innerText = "Enemy chose to defend.";
+            }
+
+            document.getElementById('player-health').innerText = playerHealth < 0 ? 0 : playerHealth;
+            document.getElementById('enemy-health').innerText = enemyHealth < 0 ? 0 : enemyHealth;
+
+            if (playerHealth <= 0) {
+                alert("You have been defeated! Better luck next time.");
+            } else if (enemyHealth <= 0) {
+                alert("You have defeated your enemy! Congratulations!");
+            }
+        }
+
+        function usePotion(potion) {
+            if (potion === 'healing') {
+                if (playerHealthPotions > 0) {
+                    let healAmount = playerHealth > 70 ? 100 - playerHealth : 30;
+                    playerHealth += healAmount;
+                    playerHealthPotions--;
+                    alert(`You used a healing potion and restored ${healAmount} health.`);
+                } else {
+                    alert("You have no healing potions left.");
+                }
+            } else if (potion === 'immunity') {
+                if (playerImmunityPotions > 0) {
+                    immunityUsed = true;
+                    playerImmunityPotions--;
+                    alert("You used an immunity potion.");
+                } else {
+                    alert("You have no immunity potions left.");
+                }
+            } else if (potion === 'strength') {
+                if (playerStrengthPotion > 0) {
+                    strengthUsed = true;
+                    playerStrengthPotion--;
+                    alert("You used a strength potion. Your next attack will deal double damage.");
+                } else {
+                    alert("You have no strength potions left.");
+                }
+            }
+        }
+    </script>
+</body>
+</html>

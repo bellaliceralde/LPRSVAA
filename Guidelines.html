@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turn-Based Battle Game - The Zone</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+            padding: 50px;
+        }
+
+        #home-page {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2em;
+        }
+
+        #instructions {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        #instructions h2 {
+            color: #444;
+            font-size: 1.5em;
+        }
+
+        #instructions ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+
+        #coin-flip {
+            margin-top: 20px;
+        }
+
+        #coin-flip button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        #coin-flip button:hover {
+            background-color: #0056b3;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div id="home-page">
+        <h1>Turn-Based Battle Game - The Zone</h1>
+        <div id="instructions">
+            <h2>Rules and Regulations</h2>
+            <ul>
+                <li>The game starts by either the player or the enemy going first. This is decided through a coin flip.</li>
+                <li>Whoever wins the coin flip deals damage to the opposing side first, while the side that receives the damage cannot deal damage back for the meantime.</li>
+                <li>There are potions you can use while playing:
+                    <ul>
+                        <li>Healing Potion: Adds 30+ health to your current health. Max health of 100. Can be used 3 times. Can be used by both the enemy and the player.</li>
+                        <li>Immunity Potion: Become immune to the next attack by the enemy. Can be used 2 times. Can only be used by the player.</li>
+                        <li>Strength Potion: Next attack deals 2x damage. Can only be used once. Can only be used by the player.</li>
+                    </ul>
+                </li>
+                <li>Damage dealt by both the player and the enemy ranges from 2 to 10.</li>
+                <li>The enemy has a 10% chance to deal critical damage to the player.</li>
+                <li>Attacks that are blocked only deal 2 to 3 damage.</li>
+                <li>If both parties decide to block, no damage will be inflicted on either side.</li>
+                <li>The game ends when either the player's health or the enemy's health hits zero.</li>
+            </ul>
+        </div>
+        <div id="coin-flip">
+            <h2>Coin Flip</h2>
+            <p>Select Heads or Tails to determine who goes first:</p>
+            <button onclick="coinFlip('heads')">Heads</button>
+            <button onclick="coinFlip('tails')">Tails</button>
+        </div>
+        <div id="result" role="alert" aria-live="polite"></div>
+    </div>
+    <script>
+        function coinFlip(choice) {
+            const result = Math.random() < 0.5 ? 'heads' : 'tails';
+            const resultText = result === choice ? 'You won the coin flip!' : 'You lost the coin flip.';
+            document.getElementById('result').textContent = `Coin flip result: ${result}. ${resultText}`;
+            setTimeout(() => {
+                const redirectPage = result === choice ? 'Player.html' : 'Enemy.html';
+                window.location.href = redirectPage;
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
